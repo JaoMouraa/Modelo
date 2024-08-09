@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR.js Test</title>
+<html>
+  <head>
+    <title>AR.js Example</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://rawcdn.githack.com/AR-js-org/AR.js/aframe/examples/aframe/build/aframe-ar-nft.js"></script>
-</head>
-<body style="margin: 0; overflow: hidden;">
+    <script src="https://cdn.rawgit.com/jeromeetienne/ar.js/1.7.2/aframe/build/aframe-ar.js"></script>
+  </head>
+  <body style="margin: 0; overflow: hidden;">
     <a-scene embedded arjs>
-        <a-marker type="pattern" url="pattern-hiro.patt">
-            <a-entity gltf-model="url(AnyConv.com__tinker.glb)" scale="0.5 0.5 0.5" position="0 0 0" rotation="0 0 0">
-            </a-entity>
-        </a-marker>
-        <a-entity camera></a-entity>
+      <a-marker preset="hiro">
+        <a-entity gltf-model="#model" scale="0.5 0.5 0.5"></a-entity>
+      </a-marker>
+      <a-entity camera></a-entity>
     </a-scene>
-</body>
+
+    <a-assets>
+      <a-asset-item id="model" src="./AnyConv.com__tinker.glb"></a-asset-item>
+    </a-assets>
+  </body>
 </html>
