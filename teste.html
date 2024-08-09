@@ -10,41 +10,41 @@
     <!-- Marker for tracking -->
     <a-marker type="pattern" url="pattern-hiro.patt" emitevents="true" id="marker">
       <!-- Plane to display the image -->
-      <a-plane id="imagePlane" position="4 0 0" rotation="-90 0 0" width="4" height="2.25" material="shader: flat; scale: 2 2 2"></a-plane>
+      <a-plane id="imagePlane" position="0 0 0" rotation="-90 0 0" width="4" height="2.25" material="shader: flat; src: url(AnyConv.com__tinker.glb);"></a-plane>
     </a-marker>
     <!-- Camera to view the scene -->
     <a-entity camera></a-entity>
   </a-scene>
-  <!-- Script to refresh every 5 seconds -->
+  <!-- Script to handle animations and image updates -->
   <script>
     const imagePlane = document.getElementById("imagePlane");
     const marker = document.getElementById("marker");
 
-    const imageUrl = "AnyConv.com__tinker.glb";
     let isAnimationRunning = false; // To prevent multiple animations
 
     marker.addEventListener("markerFound", () => {
       if (!isAnimationRunning) {
-        animatePosition(4, 0, 0, 1000); // Animates from (0, 0, 0) to (4, 0, 0) in 1 second
+        animatePosition(4, 0, 0, 1000); // Animate position when marker is found
       }
     });
 
     marker.addEventListener("markerLost", () => {
       if (!isAnimationRunning) {
-        animatePosition(4, 0, 0, 1000); // Animates from (4, 0, 0) to (0, 0, 0) in 1 second
+        animatePosition(0, 0, 0, 1000); // Animate position when marker is lost
       }
     });
 
     function animatePosition(startX, endX, endY, duration) {
       isAnimationRunning = true;
       const startTime = performance.now();
-      const startY = 0;
+      const startY = parseFloat(imagePlane.getAttribute('position').y);
 
       function updatePosition(currentTime) {
         const elapsedTime = currentTime - startTime;
         if (elapsedTime < duration) {
-          const newX = startX + (endX - startX) * (elapsedTime / duration);
-          const newY = startY + (endY - startY) * (elapsedTime / duration);
+          const progress = elapsedTime / duration;
+          const newX = startX + (endX - startX) * progress;
+          const newY = startY + (endY - startY) * progress;
           imagePlane.setAttribute("position", `${newX} ${newY} 0`);
           requestAnimationFrame(updatePosition);
         } else {
@@ -59,9 +59,11 @@
     // Function to update the image source
     function updateImageSource() {
       const uniqueParam = Date.now(); // Generate a unique parameter
+      const imageUrl = "AnyConv.com__tinker.glb";
       const newImageUrl = `${imageUrl}?v=${uniqueParam}`;
       imagePlane.setAttribute("material", "src", newImageUrl);
     }
+
     // Initial image update
     updateImageSource();
     // Check for image update every 5 seconds
